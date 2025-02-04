@@ -24,12 +24,12 @@ public:
     }
 };
 
-void sort(Address* addresses, int size) {
+void sort(Address** addresses, int size) {
     for (int i = 0; i < size; i++)
-        for (int j = i; j < size - 1; j++)
+        for (int j = i; j < size-1; j++)
         {
-            if (addresses[j].get_city() > addresses[j + 1].get_city()) {
-                Address temp = addresses[j];
+            if (addresses[j]->get_city() > addresses[j + 1]->get_city()) {
+                Address* temp = addresses[j];
                 addresses[j] = addresses[j + 1];
                 addresses[j + 1] = temp;
             }
@@ -46,21 +46,22 @@ int main()
     int house;
     int apartment;
     std::ifstream in{ "in.txt" };
+    
     if (in.is_open()) {
+
         if (in >> count) {
             adr = new Address * [count];
             for (int i = 0; i < count; ++i) {
                 in >> city >> street >> house >> apartment;
-                adr[i] = new Address(city, street, house, apartment);
-                sort( adr[i], count);
+                adr[i] = new Address(city, street, house, apartment);    
             }
 
-            
+            sort(adr, count);
 
             std::ofstream out{ "out.txt" };
             if (out.is_open()) {
                 out << count << std::endl;
-                for (int i = count - 1; i >= 0; --i) {
+                for (int i = 0; i < count; ++i) {
                     out << adr[i]->get_output_address() << std::endl;
                 }
                 out.close();
